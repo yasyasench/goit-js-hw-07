@@ -25,10 +25,10 @@ const images = [
   }
 ];
 
-const galleryUl = document.querySelector(".gallery");
-let myElements = "";
-images.forEach((el) => {
-  myElements += `<li><img src="${el.alt}"></li>`;
-});
-
-galleryUl.iinerHTML += myElements;
+const list = document.querySelector(".gallery");
+const items = images
+  .map((item) => {
+    return ` <li><img src="${item.url}" alt="${item.alt}" width="360" height="300"></li>`;
+  })
+  .join("");
+list.insertAdjacentHTML("beforeend", items);

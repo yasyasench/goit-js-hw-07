@@ -3,40 +3,47 @@ function getRandomHexColor() {
     .toString(16)
     .padStart(6, 0)}`;
 }
-const input = document.querySelector("#controls input");
-const createBtn = document.querySelector("button[data-create]");
-const desrtoyBtn = document.querySelector("button[data-destroy]");
-const boxes = document.querySelector("#boxes");
+
+const container = document.querySelector(".js-container");
+const input = document.querySelector(".input");
+const create = document.querySelector(".create-btn");
+const destroy = document.querySelector(".destroy-btn");
+
+create.addEventListener("click", handleCreate);
+destroy.addEventListener("click", handleDestroy);
+
+
+function handleCreate() {
+  const amount = parseInt(input.value);
+
+  if (amount >= 1 && amount <= 100) {
+    createBoxes(amount);
+    input.value = ""; 
+  } else {
+    alert("Введіть, будь ласка, число від 1 до 100 :)");
+  }
+}
+
 
 function createBoxes(amount) {
-  let size = 30;
-  let htmlString = "";
+  container.innerHTML = ""; 
 
-  for (let i = 0; i < amount; i++){
-    const color = getRandomHexColor();
-    htmlString += `<div style="background-color: ${color}; width : ${size}px; heigth: ${size}px;"></div>`;
-    size += 10;
+  let boxSize = 30; 
+  const boxBigger = 10; 
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < amount; i++) {
+    const box = document.createElement("div");
+    box.style.width = `${boxSize}px`;
+    box.style.height = `${boxSize}px`;
+    box.style.backgroundColor = getRandomHexColor();
+    boxSize += boxBigger;
+    fragment.appendChild(box); 
   }
-  boxes.innerHTML = htmlString; 
+  container.appendChild(fragment); 
+  
 }
 
-createBtn.addEventListener("click", () => {
-  const val = parseInt(input.value);
-  const atrMin = parseInt(input.getAttribute("min"));
-  const atrMax = parseInt(input.getAttribute("max"));
-
-  if (val >= atrMin && val <= atrMax) {
-    createBoxes(input.value);
-    input.value = "";
-  }
-});
-
-function desrtoyBoxes(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
+function handleDestroy() {
+  container.innerHTML = "";
 }
-
-desrtoyBtn.addEventListener("click", () => {
-  desrtoyBoxes(boxes);
-});
